@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+
+<div th:fragment="modal (newUser)"
+     id="create-user-modal"
+     class="modal"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" th:action="@{/users}" th:object="${newUser}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="inputName" class="form-label">Name</label>
+            <input th:field="*{name}"
+                   type="text"
+                   id="inputName"
+                   class="form-control"
+                   aria-describedby="nameHelpBlock"
+                   required>
+            <div id="nameHelpBlock" class="form-text">
+              Must be the employee real name
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="inputEmail" class="form-label">Email</label>
+            <input th:field="*{email}"
+                   id="inputEmail"
+                   type="email"
+                   class="form-control"
+                   aria-describedby="emailHelpBlock">
+            <div id="emailHelpBlock" class="form-text">
+              Must be the employee corporate email
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="inputPassword" class="form-label">Password</label>
+            <input th:field="*{password}"
+                   id="inputPassword"
+                   type="password"
+                   class="form-control"
+                   aria-describedby="passwordHelpBlock">
+            <div id="passwordHelpBlock" class="form-text">
+              Must contain at least 8 characters
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="inputConfirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" id="inputConfirmPassword" class="form-control"
+                   aria-describedby="confirmPasswordHelpBlock">
+            <div id="confirmPasswordHelpBlock" class="form-text">
+              Must match the above password
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <input type="submit" class="btn btn-primary" value="Create" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

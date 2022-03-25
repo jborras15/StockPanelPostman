@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos del product</title>
+</head>
+<body>
+<h1>Datos de la product </h1>
+<a th:href="@{/}">Regresar</a>;
+<br/>
+<form th:action="@{/save}" method="post" th:object="${product}" enctype="multipart/form-data">
+    <input type="hidden" name="idProduct" th:field="*{idProduct}" >
+    <br/>
+    <label for="name">Name</label>
+    <input id="name" type="text" name="name" th:field="*{name}">
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error Name</span>
+    <br/>
+    <label for ="code">Code</label>
+    <input id="code" type="text" name="code" th:field="*{code}"/>
+    <span th:if="${#fields.hasErrors('code')}" th:errors="*{code}">Error Code</span>
+    <br/>
+    <label for="quantity">Quantity</label>
+    <input id="quantity" type="text" name="quantity" th:field="*{quantity}"/>
+    <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">Error Quantity</span>
+    <br/>
+    <label for="reference">Reference</label>
+    <input id="reference" type="text" name="reference" th:field="*{reference}">
+    <span th:if="${#fields.hasErrors('reference')}" th:errors="*{reference}">Error Reference</span>
+    <br/>
+    <label for="file">Image</label>
+    <input id="file" type="file" name="file"  >
+
+
+
+
+    <br/>
+
+    <input type="submit" name="save" value="Save">
+
+</form>
+
+</body>
+</html>
