@@ -41,6 +41,7 @@ public class ProductServiceImple implements ProductService {
 
     }
 
+
     @Override
     @Transactional
     public void delete(Product product) {
@@ -49,8 +50,15 @@ public class ProductServiceImple implements ProductService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Product findproduct(Product product) {
-        return productRepository.findById(product.getIdProduct()).orElse(null);
+    public Product actualizar(Product product) {
+        return productRepository.save(product);
     }
+
+    @Override
+    @Transactional
+    public Product findproduct(Long id) {
+        return productRepository.findById(id).get();
+    }
+
+
 }

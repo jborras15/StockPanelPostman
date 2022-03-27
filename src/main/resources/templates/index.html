@@ -8,65 +8,132 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
-<div th:insert="~{navbar :: navbar}"></div>
-<div th:if="${!list.isEmpty()}">
-    <a th:href="@{/modify}">Create product</a>
 
+<div th:insert="~{navbar :: navbar}"></div>
+<div class="container-xxl">
+    <br>
+    <div th:if="${!list.isEmpty()}">
+
+        <div class="d-flex justify-content-between">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a th:href="@{/create}" class="btn btn-outline-primary">Create product</a></div>
+
+            <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/search}">
+                <div class="d-flex justify-content-between">
+                    <div><input class="form-control mr-sm-2" type="search"
+                                placeholder="Buscar" aria-label="Search" name="nombre"
+                                autocomplete="off"></div>
+                    <div>
+                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
+    <br>
     <table class="table table-striped table-bordered">
         <tr>
             <th>ID</th>
+            <th>Image</th>
             <th>Name</th>
             <th>Code</th>
             <th>Quantity</th>
             <th>Reference</th>
             <th>Edit</th>
             <th>Delete</th>
-
-
         </tr>
         <tr th:each="product : ${list}">
-            <td><a th:href="@{/detalle/{idProduct} (idProduct=${product.idProduct})}" th:text="${product.idProduct}"/>
-                <img th:src="@{'/recursos/' + ${product.image}}"
-                     th:alt="${product.image}" style="width: 100px;height: 100px;"
-                    ></td>
-            <td th:text="${product.name}">Display Name</td>
-            <td th:text="${product.code}">Display Code</td>
-            <td  >
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"  th:attr=" data-bs-target='#exampleModal'+ ${product.quantity}" th:text="${product.quantity}">
+            <td th:text="${product.idProduct}"></td>
+            <td>
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                        th:attr=" data-bs-target='#modalDetalle'+ ${product.idProduct}">
+
+                    <img th:src="@{'/recursos/' + ${product.image}}"
+                         th:alt="${product.image}" style="width: 100px;height: 100px;"
+                    >
                 </button>
-Display Quantity
-                <div class="modal fade" th:id="exampleModal + ${product.quantity}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" th:id="modalDetalle + ${product.idProduct}" tabindex="-1"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" >New message</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <h5 class="modal-title">
+                                    Product Data</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                        <input type="text" class="form-control" id="recipient-name">
+                                <br/>
+                                <img th:src="@{'/recursos/' + ${product.image}}"
+                                     th:alt="${product.image}"
+                                     style="max-width: 25%">
+                                <br>
+                                <ul>
+                                    <li th:text="'PRODUCT NAME:  ' +${product.name}"></li>
+                                    <br>
+                                    <li th:text="'PRODUCT CODE:  ' +${product.code}"></li>
+                                    <br>
+                                    <li th:text="'PRODUCTO QUANTITY:  ' +${product.quantity}"></li>
+                                    <br>
+                                    <li th:text="'PRODUCTO REFERENCE:  ' +${product.reference}"></li>
+
+                                </ul>
+                                <div class="modal-footer">
+                                    <a th:href="@{/}" class="btn btn-outline-primary">To return</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </td>
+            <td th:text="${product.name}">Display Name</td>
+            <td th:text="${product.code}">Display Code</td>
+            <td>
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                        th:attr=" data-bs-target='#exampleModal'+ ${product.idProduct}" th:text="${product.quantity}">
+                </button>
+                <div class="modal fade" th:id="exampleModal + ${product.idProduct}" tabindex="-1"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    Modify Product Quantity</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/actualizar/{idProduct}(idProduct=${product.idProduct})}"
+                                      method="post"
+                                      th:object="${product}" enctype="multipart/form-data"
+                                      class="was-validated">
+                                    <div class="form-group">
+                                        <input type="hidden" name="idProduct" th:field="*{idProduct}">
+                                        <label for="quantity" class="form-label">Quantity</label>
+                                        <input id="quantity" type="text" name="product" th:field="*{quantity}"
+                                               class="form-control"
+                                               required="true"/>
+                                        <span th:if="${#fields.hasErrors('quantity')}"
+                                              th:errors="*{quantity}">Error Quantity</span>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="message-text" class="col-form-label">Message:</label>
-                                        <textarea class="form-control" id="message-text"></textarea>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                        </button>
+                                        <input type="submit" class="btn btn-primary" value="Save"/>
                                     </div>
                                 </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Send message</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </td>
             <td th:text="${product.reference}">Display Reference</td>
-            <td><a th:href="@{/edit/{idProduct} (idProduct=${product.idProduct})}" th:text="Edit"/></td>
-            <td><a th:href="@{/delete(idProduct=${product.idProduct})}"  th:text="Delete"/></td>
-
+            <td><a th:href="@{/edit/{idProduct} (idProduct=${product.idProduct})}" th:text="Edit"
+                   class="btn btn-outline-primary"/></td>
+            <td><a th:href="@{/delete(idProduct=${product.idProduct})}" th:text="Delete"
+                   class="btn btn-outline-danger"/>
+            </td>
         </tr>
     </table>
     <div class="row">
@@ -86,11 +153,11 @@ Display Quantity
                 </ul>
             </nav>
         </div>
-
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-            crossorigin="anonymous"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
 
 </div>
 </body>

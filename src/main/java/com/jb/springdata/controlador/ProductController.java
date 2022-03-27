@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,11 +27,11 @@ import java.util.stream.IntStream;
 @RequestMapping("/")
 public class ProductController {
 
-    @Autowired
+   @Autowired
     private ProductService productService;
 
     @GetMapping
-    public String  findAll(@RequestParam Map<String, Object> params, Model model){
+    public String  findAll(@RequestParam Map<String, Object> params, Model model, @ModelAttribute Product product){
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString())-1) : 0;
 
         PageRequest pageRequest = PageRequest.of(page, 9);
@@ -51,14 +52,8 @@ public class ProductController {
         return "index";
     }
 
-    @GetMapping("/page")
-    public String home(Model model) {
-        var products = productService.listProducts();
-        model.addAttribute("products", products);
-        return "products";
-    }
 
-    @GetMapping(value = "/modify")
+    @GetMapping(value = "/create")
     public String add(Model   model){
         model.addAttribute("product", new Product());
         return "modify";
@@ -86,33 +81,50 @@ public class ProductController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
         productService.save(product);
         return "redirect:/";
     }
 
     @GetMapping ("/detalle/{idProduct}")
-    public String detalleProduct(Product product, Model model ){
-
-        product = productService.findproduct(product);
-        model.addAttribute("product", product);
+    public String detalleProduct(@PathVariable Long idProduct, Model model ){
+        model.addAttribute("product",productService.findproduct(idProduct));
         return "detalleProduct";
     }
 
     @GetMapping("/edit/{idProduct}")
-    public String edit(Product product, Model model){
-        product = productService.findproduct(product);
-        model.addAttribute("product", product);
+    public String edit(@PathVariable Long idProduct,Model model){
+        model.addAttribute("product", productService.findproduct(idProduct));
         return "modify";
     }
+
+
 
     @GetMapping("/delete")
     public String delete(Product product){
         productService.delete(product);
         return "redirect:/";
     }
+
+    @PostMapping("actualizar/{idProduct}")
+    public  String actualizar(@PathVariable Long idProduct, @ModelAttribute("product") Product product){
+        Product products = productService.findproduct(idProduct);
+        products.setIdProduct(idProduct);
+        products.setQuantity(product.getQuantity());
+
+        productService.actualizar(products);
+        return "redirect:/";
+    }
+
+    @PostMapping("/search")
+    public String searchProduct(@RequestParam String nombre, Model model) {
+        log.info("Nombre del producto: {}", nombre);
+        List<Product> products =productService.listProducts().stream().filter(p -> p.getName().contains(nombre)).collect(Collectors.toList());
+        model.addAttribute("list", products);
+
+        return "redirect:/";
+    }
+
 
 
 }
