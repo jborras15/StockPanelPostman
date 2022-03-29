@@ -60,5 +60,13 @@ public class ProductServiceImple implements ProductService {
         return productRepository.findById(id).get();
     }
 
+    @Override
+    @Transactional
+    public List<Product> findByTitle(String q) {
+            List<Product> entities = productRepository.findByTitle(q);
+            return entities;
+
+    }
+
 
 }

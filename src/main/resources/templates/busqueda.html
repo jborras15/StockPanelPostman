@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos del product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<div th:insert="~{navbar :: navbar}"></div>
+<div class="container">
+            <div class="card-deck mt-5" th:if="${products.size}">
+                <h2>Resultados: </h2>
+                <a th:href="@{/}" class="btn btn-outline-primary">To return</a>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Quantity</th>
+                        <th>Reference</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.idProduct}"></td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    th:attr=" data-bs-target='#modalDetalles'+ ${product.idProduct}">
+
+                                <img th:src="@{'/recursos/' + ${product.image}}" th:alt="${product.image}" style="width: 100px;height: 100px;">
+                            </button>
+                            <div class="modal fade" th:id="modalDetalles + ${product.idProduct}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">
+                                                Product Data</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            </br>
+                                            <img th:src="@{'/recursos/' + ${product.image}}"
+                                                 th:alt="${product.image}"
+                                                 style="max-width: 25%">
+                                            <br>
+                                            <ul>
+                                                <li th:text="'PRODUCT NAME:  ' +${product.name}"></li>
+                                                </br>
+                                                <li th:text="'PRODUCT CODE:  ' +${product.code}"></li>
+                                                </br>
+                                                <li th:text="'PRODUCTO QUANTITY:  ' +${product.quantity}"></li>
+                                                <br>
+                                                <li th:text="'PRODUCTO REFERENCE:  ' +${product.reference}"></li>
+
+                                            </ul>
+                                            <div class="modal-footer">
+                                                <a th:href="@{/}" class="btn btn-outline-primary">To return</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                        <td th:text="${product.name}">Display Name</td>
+                        <td th:text="${product.code}">Display Code</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    th:attr=" data-bs-target='#exampleModal'+ ${product.idProduct}" th:text="${product.quantity}">
+                            </button>
+                            <div class="modal fade" th:id="exampleModal + ${product.idProduct}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">
+                                                Modify Product Quantity</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:object="${product}" th:action="@{/actualizar/{idProduct}(idProduct=${product.idProduct})}"
+                                                  method="post"
+                                                  enctype="multipart/form-data"
+                                                  class="was-validated">
+                                                <div class="form-group">
+                                                    <input type="hidden" name="idProduct"  >
+                                                    <label for="quantity" class="form-label">Quantity</label>
+                                                    <input id="quantity" type="text"  name="product"
+                                                           class="form-control"
+                                                           required="true"/>
+                                                </div>
+                                            </form>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                                    </button>
+                                                    <input type="submit" class="btn btn-primary" value="Save"/>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:text="${product.reference}">Display Reference</td>
+                        <td><a th:href="@{/edit/{idProduct} (idProduct=${product.idProduct})}" th:text="Edit"
+                               class="btn btn-outline-primary"/></td>
+                        <td><a th:href="@{/delete(idProduct=${product.idProduct})}" th:text="Delete"
+                               class="btn btn-outline-danger"/></td>
+
+                    </tr>
+                </table>
+
+            </div>
+            <div th:unless="${products.size}">
+                <a th:href="@{/}" class="btn btn-outline-primary">To return</a>
+                <h2>No hay resultado</h2>
+            </div>
+</div>
+<br>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -12,20 +12,19 @@
 <div th:insert="~{navbar :: navbar}"></div>
 <div class="container-xxl">
     <br>
-    <div th:if="${!list.isEmpty()}">
+    <div>
 
         <div class="d-flex justify-content-between">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <a th:href="@{/create}" class="btn btn-outline-primary">Create product</a></div>
 
-            <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/search}">
+            <form class="form-inline my-2 my-lg-0"  th:action="@{/busqueda}">
                 <div class="d-flex justify-content-between">
                     <div><input class="form-control mr-sm-2" type="search"
-                                placeholder="Buscar" aria-label="Search" name="nombre"
-                                autocomplete="off"></div>
-                    <div>
-                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
-                    </div>
+                                placeholder="Buscar" aria-label="Search" name="query"
+                                autocomplete="off" required></div>
+                        <div><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button></div>
+
                 </div>
             </form>
         </div>

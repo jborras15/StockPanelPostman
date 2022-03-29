@@ -7,11 +7,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 @Data
 @Entity
-@Table(name="user")
+@Table(name="users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,8 +30,12 @@ public class User implements Serializable {
     @NotEmpty
     private String password;
 
-    @Column(nullable = false)
-    private String role = "NORMAL";
+    @OneToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @JoinTable( name = "user_roles",
+     joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name="rol_id", referencedColumnName = "id"))
+
+    private Collection<Rol> roles;
 
     @CreationTimestamp
     private Date createdAt;

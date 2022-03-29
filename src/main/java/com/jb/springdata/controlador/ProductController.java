@@ -116,16 +116,12 @@ public class ProductController {
         return "redirect:/";
     }
 
-    @PostMapping("/search")
-    public String searchProduct(@RequestParam String nombre, Model model) {
-        log.info("Nombre del producto: {}", nombre);
-        List<Product> products =productService.listProducts().stream().filter(p -> p.getName().contains(nombre)).collect(Collectors.toList());
-        model.addAttribute("list", products);
+    @GetMapping(value ="/busqueda")
+    public String busquedaProduct(Model model, @RequestParam (value = "query", required = false) String q)  {
 
-        return "redirect:/";
-    }
-
-
+            List<Product> products = productService.findByTitle(q);
+            model.addAttribute("products", products);
+            return "/busqueda";}
 
 }
 
