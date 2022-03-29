@@ -1,9 +1,8 @@
 package com.jb.springdata.servicio;
 
-import com.jb.springdata.modelo.Product;
+import com.jb.springdata.Entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

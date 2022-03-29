@@ -1,7 +1,7 @@
 package com.jb.springdata.servicio;
 
 
-import com.jb.springdata.modelo.Product;
+import com.jb.springdata.Entity.Product;
 import com.jb.springdata.repositorio.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

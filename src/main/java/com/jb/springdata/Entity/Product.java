@@ -1,4 +1,4 @@
-package com.jb.springdata.modelo;
+package com.jb.springdata.Entity;
 
 import lombok.Data;
 import javax.persistence.*;

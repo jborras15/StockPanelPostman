@@ -1,6 +1,6 @@
 package com.jb.springdata.controlador;
 
-import com.jb.springdata.modelo.Product;
+import com.jb.springdata.Entity.Product;
 import com.jb.springdata.servicio.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

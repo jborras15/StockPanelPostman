@@ -18,9 +18,8 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="inputName" class="form-label">Name</label>
-            <input th:field="*{name}"
+            <input id="inputName"
                    type="text"
-                   id="inputName"
                    class="form-control"
                    aria-describedby="nameHelpBlock"
                    required>
@@ -30,8 +29,7 @@
           </div>
           <div class="mb-3">
             <label for="inputEmail" class="form-label">Email</label>
-            <input th:field="*{email}"
-                   id="inputEmail"
+            <input id="inputEmail"
                    type="email"
                    class="form-control"
                    aria-describedby="emailHelpBlock">
@@ -41,8 +39,7 @@
           </div>
           <div class="mb-3">
             <label for="inputPassword" class="form-label">Password</label>
-            <input th:field="*{password}"
-                   id="inputPassword"
+            <input id="inputPassword"
                    type="password"
                    class="form-control"
                    aria-describedby="passwordHelpBlock">
