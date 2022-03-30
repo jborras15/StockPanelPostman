@@ -1,7 +1,7 @@
 package com.jb.springdata.controller;
 
 import com.jb.springdata.entity.Product;
-import com.jb.springdata.service.ProductService;
+import com.jb.springdata.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,18 +28,33 @@ import java.util.stream.IntStream;
 @RequestMapping("/")
 public class ProductController {
 
-   @Autowired
-    private ProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
+
+    private int castToInteger(String number) {
+        boolean isNull = number == null;
+        return isNull ? 0 : Integer.parseInt(number);
+    }
 
     @GetMapping
-    public String  findAll(@RequestParam Map<String, Object> params, Model model, @ModelAttribute Product product){
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString())-1) : 0;
+    public String findAll(
+            @RequestParam Map<String, Object> params,
+            @ModelAttribute Product product,
+            Model model
+    ) {
+        int page = this.castToInteger((String) params.get("page"));
+        String searchTerm = (String) params.get("search");
 
-        PageRequest pageRequest = PageRequest.of(page, 9);
-        Page<Product> productPage = productService.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(page, 2);
+        Page<Product> productPage;
+        if (searchTerm != null) {
+            productPage = productRepository.findProductByNameContains(searchTerm, pageRequest);
+        } else {
+            productPage = productRepository.findAll(pageRequest);
+        }
 
         int totalPage = productPage.getTotalPages();
-        if(totalPage >0 ) {
+        if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
         }
@@ -46,34 +62,34 @@ public class ProductController {
         model.addAttribute("list", productPage.getContent());
         model.addAttribute("current", page + 1);
         model.addAttribute("next", page + 2);
-        model.addAttribute("previous", page );
-        model.addAttribute("last", totalPage );
+        model.addAttribute("previous", page);
+        model.addAttribute("last", totalPage);
 
         return "index";
     }
 
 
     @GetMapping(value = "/create")
-    public String add(Model   model){
+    public String add(Model model) {
         model.addAttribute("product", new Product());
         return "modify";
     }
 
     @PostMapping("/save")
-    public String save(@Valid @ModelAttribute Product product, Errors error,  @RequestParam("file")MultipartFile image){
+    public String save(@Valid @ModelAttribute Product product, Errors error, @RequestParam("file") MultipartFile image) {
 
 
-        if(error.hasErrors()){
+        if (error.hasErrors()) {
             return "modify";
         }
-        if(!image.isEmpty()){
+        if (!image.isEmpty()) {
             //Path directorioImagenes = Paths.get("src//main//resources//static/image");
             //String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-            String rutaAbsoluta= "//home//jorge//Escritorio//proyectofinal//recursos";
+            String rutaAbsoluta = "//home//jorge//Escritorio//proyectofinal//recursos";
 
             try {
-                byte[] bytesImg =image.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "//"+ image.getOriginalFilename());
+                byte[] bytesImg = image.getBytes();
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "//" + image.getOriginalFilename());
                 Files.write(rutaCompleta, bytesImg);
 
                 product.setImage(image.getOriginalFilename());
@@ -82,46 +98,44 @@ public class ProductController {
                 e.printStackTrace();
             }
         }
-        productService.save(product);
+        productRepository.save(product);
         return "redirect:/";
     }
 
-    @GetMapping ("/detalle/{idProduct}")
-    public String detalleProduct(@PathVariable Long idProduct, Model model ){
-        model.addAttribute("product",productService.findproduct(idProduct));
+    @GetMapping("/detalle/{idProduct}")
+    public String detalleProduct(@PathVariable Long idProduct, Model model) {
+        model.addAttribute("product", productRepository.findById(idProduct));
         return "detalleProduct";
     }
 
     @GetMapping("/edit/{idProduct}")
-    public String edit(@PathVariable Long idProduct,Model model){
-        model.addAttribute("product", productService.findproduct(idProduct));
+    public String edit(@PathVariable Long idProduct, Model model) {
+        model.addAttribute("product", productRepository.findById(idProduct));
         return "modify";
     }
 
 
-
     @GetMapping("/delete")
-    public String delete(Product product){
-        productService.delete(product);
+    public String delete(Product product) {
+        productRepository.delete(product);
         return "redirect:/";
     }
 
     @PostMapping("actualizar/{idProduct}")
-    public  String actualizar(@PathVariable Long idProduct, @ModelAttribute("product") Product product){
-        Product products = productService.findproduct(idProduct);
-        products.setIdProduct(idProduct);
-        products.setQuantity(product.getQuantity());
+    public String actualizar(
+            @PathVariable Long idProduct,
+            @ModelAttribute("product") Product newProduct
+    ) {
+        Optional<Product> result = productRepository.findById(idProduct);
 
-        productService.actualizar(products);
+        if (result.isPresent()) {
+            Product product = result.get();
+            product.setQuantity(newProduct.getQuantity());
+            productRepository.save(product);
+        }
+
         return "redirect:/";
     }
-
-    @GetMapping(value ="/busqueda")
-    public String busquedaProduct(Model model, @RequestParam (value = "query", required = false) String q)  {
-
-            List<Product> products = productService.findByTitle(q);
-            model.addAttribute("products", products);
-            return "search";}
 
 }
 
