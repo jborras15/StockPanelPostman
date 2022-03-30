@@ -1,6 +1,6 @@
-package com.jb.springdata.servicio;
+package com.jb.springdata.service;
 
-import com.jb.springdata.Entity.Product;
+import com.jb.springdata.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,12 +1,9 @@
-package com.jb.springdata.servicio;
+package com.jb.springdata.service;
 
-
-import com.jb.springdata.model.UserDTO;
-import com.jb.springdata.Entity.User;
-import com.jb.springdata.Entity.VerificationToken;
-import com.jb.springdata.repositorio.PasswordResetTokenRepository;
-import com.jb.springdata.repositorio.UserRepository;
-import com.jb.springdata.repositorio.VerificationTokenRepository;
+import com.jb.springdata.entity.User;
+import com.jb.springdata.entity.VerificationToken;
+import com.jb.springdata.repository.UserRepository;
+import com.jb.springdata.repository.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,13 +27,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordResetTokenRepository passwordResetTokenRepository;
-
-
-
-
-
     @Override
     @Transactional(readOnly = true)
     public Page<User> findAll(Pageable pageable) {
@@ -52,19 +42,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void save(User user) {
-        int res=0;
-        User users = userRepository.save(user);
-        if(!user.equals(null)){
-            res=1;
-        }
-
+        userRepository.save(user);
     }
 
     @Override
     @Transactional
     public void delete(User user) {
         userRepository.delete(user);
-
     }
 
     @Override
@@ -73,18 +57,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(user.getId()).orElse(null);
     }
 
-    @Override
-    public User registerUser(UserDTO userDTO) {
-        User user = new User();
-        user.setEmail(userDTO.getEmail());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setRole("USER");
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
-        userRepository.save(user);
-        return user;
-    }
     @Override
     public void saveVerificationTokenForUser(String token, User user) {
         VerificationToken verificationToken

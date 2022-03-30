@@ -1,4 +1,4 @@
-package com.jb.springdata.configurity;
+package com.jb.springdata.settings;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

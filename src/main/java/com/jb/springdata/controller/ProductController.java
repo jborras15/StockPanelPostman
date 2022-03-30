@@ -1,7 +1,7 @@
-package com.jb.springdata.controlador;
+package com.jb.springdata.controller;
 
-import com.jb.springdata.Entity.Product;
-import com.jb.springdata.servicio.ProductService;
+import com.jb.springdata.entity.Product;
+import com.jb.springdata.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -121,7 +121,7 @@ public class ProductController {
 
             List<Product> products = productService.findByTitle(q);
             model.addAttribute("products", products);
-            return "/busqueda";}
+            return "search";}
 
 }
 

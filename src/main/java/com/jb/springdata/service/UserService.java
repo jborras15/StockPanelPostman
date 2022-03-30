@@ -1,13 +1,11 @@
-package com.jb.springdata.servicio;
+package com.jb.springdata.service;
 
-import com.jb.springdata.Entity.VerificationToken;
-import com.jb.springdata.model.UserDTO;
-import com.jb.springdata.Entity.User;
+import com.jb.springdata.entity.VerificationToken;
+import com.jb.springdata.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-
 
 public interface UserService {
     Page<User> findAll(Pageable pageable);
@@ -16,7 +14,6 @@ public interface UserService {
     public  void delete(User user);
     public User findproduct(User user);
 
-    User registerUser(UserDTO userDTO);
     void saveVerificationTokenForUser(String token,User user);
 
     String validateVerificationToken(String token);

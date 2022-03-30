@@ -1,6 +1,6 @@
-package com.jb.springdata.repositorio;
+package com.jb.springdata.repository;
 
-import com.jb.springdata.Entity.Product;
+import com.jb.springdata.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

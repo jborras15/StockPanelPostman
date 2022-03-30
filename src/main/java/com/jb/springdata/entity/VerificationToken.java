@@ -1,4 +1,4 @@
-package com.jb.springdata.Entity;
+package com.jb.springdata.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

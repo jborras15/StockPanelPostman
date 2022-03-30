@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
 
-<div th:fragment="modal (newUser)"
+<div th:fragment="modal(newUser)"
      id="create-user-modal"
      class="modal"
      tabindex="-1"
@@ -19,6 +19,7 @@
           <div class="mb-3">
             <label for="inputName" class="form-label">Name</label>
             <input id="inputName"
+                   th:field="*{firstName}"
                    type="text"
                    class="form-control"
                    aria-describedby="nameHelpBlock"
@@ -26,10 +27,21 @@
             <div id="nameHelpBlock" class="form-text">
               Must be the employee real name
             </div>
-          </div>
-          <div class="mb-3">
+
+            <label for="inputLastName" class="form-label">LastName</label>
+            <input id="inputLastName"
+                   th:field="*{lastName}"
+                   type="text"
+                   class="form-control"
+                   aria-describedby="nameHelpBlock"
+                   required>
+            <div id="lastNameHelpBlock" class="form-text">
+              Must be the employee real name
+            </div>
+
             <label for="inputEmail" class="form-label">Email</label>
             <input id="inputEmail"
+                   th:field="*{email}"
                    type="email"
                    class="form-control"
                    aria-describedby="emailHelpBlock">
@@ -40,6 +52,7 @@
           <div class="mb-3">
             <label for="inputPassword" class="form-label">Password</label>
             <input id="inputPassword"
+                   th:field="*{password}"
                    type="password"
                    class="form-control"
                    aria-describedby="passwordHelpBlock">

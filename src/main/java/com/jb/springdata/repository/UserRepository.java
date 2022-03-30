@@ -1,6 +1,6 @@
-package com.jb.springdata.repositorio;
+package com.jb.springdata.repository;
 
-import com.jb.springdata.Entity.User;
+import com.jb.springdata.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

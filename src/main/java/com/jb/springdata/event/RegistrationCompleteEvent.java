@@ -1,6 +1,6 @@
 package com.jb.springdata.event;
 
-import com.jb.springdata.Entity.User;
+import com.jb.springdata.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;

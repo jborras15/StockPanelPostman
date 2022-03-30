@@ -1,8 +1,8 @@
 package com.jb.springdata.event.listener;
 
 import com.jb.springdata.event.RegistrationCompleteEvent;
-import com.jb.springdata.Entity.User;
-import com.jb.springdata.servicio.UserService;
+import com.jb.springdata.entity.User;
+import com.jb.springdata.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

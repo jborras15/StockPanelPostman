@@ -1,11 +1,10 @@
-package com.jb.springdata.Entity;
+package com.jb.springdata.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 
