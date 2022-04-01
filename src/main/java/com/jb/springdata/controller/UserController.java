@@ -1,7 +1,9 @@
 package com.jb.springdata.controller;
 
+import com.jb.springdata.entity.Product;
 import com.jb.springdata.entity.User;
 import com.jb.springdata.event.RegistrationCompleteEvent;
+import com.jb.springdata.repository.UserRepository;
 import com.jb.springdata.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -17,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -53,6 +58,12 @@ public class UserController {
                 ":" +
                 request.getServerPort() +
                 request.getContextPath();
+    }
+
+    @GetMapping("/deleteUser")
+    public String delete(User user) {
+        userRepository.delete(user);
+        return "redirect:/users";
     }
 }
 

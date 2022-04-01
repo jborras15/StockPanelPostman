@@ -42,10 +42,11 @@ public class ProductController {
             @ModelAttribute Product product,
             Model model
     ) {
-        int page = this.castToInteger((String) params.get("page"));
+
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString())-1) : 0;
         String searchTerm = (String) params.get("search");
 
-        PageRequest pageRequest = PageRequest.of(page, 2);
+        PageRequest pageRequest = PageRequest.of(page, 9);
         Page<Product> productPage;
         if (searchTerm != null) {
             productPage = productRepository.findProductByNameContains(searchTerm, pageRequest);
@@ -60,10 +61,10 @@ public class ProductController {
         }
 
         model.addAttribute("list", productPage.getContent());
-        model.addAttribute("current", page + 1);
+        model.addAttribute("current", page +1);
         model.addAttribute("next", page + 2);
-        model.addAttribute("previous", page);
-        model.addAttribute("last", totalPage);
+        model.addAttribute("previous", page );
+        model.addAttribute("last", totalPage );
 
         return "index";
     }

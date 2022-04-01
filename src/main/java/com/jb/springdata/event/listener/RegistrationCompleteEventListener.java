@@ -6,8 +6,17 @@ import com.jb.springdata.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import java.util.Properties;
 import java.util.UUID;
 
 @Component
@@ -30,8 +39,37 @@ public class RegistrationCompleteEventListener implements
                         + "/verifyRegistration?token="
                         + token;
 
-        //sendVerificationEmail()
-        log.info("Click the link to verify your account: {}",
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp-mail.outlook.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("capito-15-1994@hotmail.com");
+        mailSender.setPassword("@192837Jl");
+
+        Properties properties = new Properties();
+        properties.setProperty("mail.smtp.auth", "true");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
+        properties.setProperty("mail.smtp.starttls.required", "true");
+
+        mailSender.setJavaMailProperties(properties);
+        MimeMessagePreparator message = mimeMessage -> {
+            mimeMessage.setFrom("capito-15-1994@hotmail.com");
+            mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+            mimeMessage.setText(url);
+        };
+
+        try {
+            mailSender.send(message);
+        } catch (MailException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+
+
+
+
+
+                log.info("Click the link to verify your account: {}",
                 url);
 
     }
