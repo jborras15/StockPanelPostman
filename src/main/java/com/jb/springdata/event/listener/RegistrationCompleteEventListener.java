@@ -6,10 +6,7 @@ import com.jb.springdata.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
@@ -34,6 +31,7 @@ public class RegistrationCompleteEventListener implements
         String token = UUID.randomUUID().toString();
         userService.saveVerificationTokenForUser(token,user);
         //enviar Mail a usuario
+
         String url =
                 event.getApplicationUrl()
                         + "/verifyRegistration?token="
@@ -41,10 +39,10 @@ public class RegistrationCompleteEventListener implements
 
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp-mail.outlook.com");
+        mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-        mailSender.setUsername("capito-15-1994@hotmail.com");
-        mailSender.setPassword("@192837Jl");
+        mailSender.setUsername("jborras15@gmail.com");
+        mailSender.setPassword("wbwvfihyjzcecieh");
 
         Properties properties = new Properties();
         properties.setProperty("mail.smtp.auth", "true");
@@ -53,9 +51,9 @@ public class RegistrationCompleteEventListener implements
 
         mailSender.setJavaMailProperties(properties);
         MimeMessagePreparator message = mimeMessage -> {
-            mimeMessage.setFrom("capito-15-1994@hotmail.com");
+            mimeMessage.setFrom("jborras15@gmail.com");
             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
-            mimeMessage.setText(url);
+            mimeMessage.setText( url);
         };
 
         try {
@@ -63,12 +61,6 @@ public class RegistrationCompleteEventListener implements
         } catch (MailException ex) {
             System.err.println(ex.getMessage());
         }
-
-
-
-
-
-
                 log.info("Click the link to verify your account: {}",
                 url);
 
