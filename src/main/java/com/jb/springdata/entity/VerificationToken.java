@@ -10,6 +10,7 @@ import java.util.Date;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name = "verification_tokens")
 public class  VerificationToken{
 
     //Expira time 10 miutes

@@ -18,12 +18,14 @@
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <a th:href="@{/create}" class="btn btn-outline-primary">Create product</a></div>
 
-            <form class="form-inline my-2 my-lg-0"  th:action="@{/}">
+            <form class="form-inline my-2 my-lg-0" th:action="@{/}">
                 <div class="d-flex justify-content-between">
                     <div><input class="form-control mr-sm-2" type="search"
                                 placeholder="Buscar" aria-label="Search" name="search"
                                 autocomplete="off" required></div>
-                        <div><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button></div>
+                    <div>
+                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
+                    </div>
 
                 </div>
             </form>
@@ -47,7 +49,7 @@
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                         th:attr=" data-bs-target='#modalDetalle'+ ${product.idProduct}">
 
-                    <img th:src="@{'/recursos/' + ${product.image}}"
+                    <img th:src="@{'/recurso/' + ${product.image}}"
                          th:alt="${product.image}" style="width: 100px;height: 100px;"
                     >
                 </button>
@@ -63,7 +65,7 @@
                             </div>
                             <div class="modal-body">
                                 <br/>
-                                <img th:src="@{'/recursos/' + ${product.image}}"
+                                <img th:src="@{'/recurso/' + ${product.image}}"
                                      th:alt="${product.image}"
                                      style="max-width: 25%">
                                 <br>
@@ -105,7 +107,7 @@
                             <div class="modal-body">
                                 <form th:action="@{/actualizar/{idProduct}(idProduct=${product.idProduct})}"
                                       method="post"
-                                      th:object="${product}" enctype="multipart/form-data"
+                                      th:object="${newProducts}" enctype="multipart/form-data"
                                       class="was-validated">
                                     <div class="form-group">
                                         <input type="hidden" name="idProduct" th:field="*{idProduct}">
@@ -140,11 +142,11 @@
         <div class="col-md-8">
             <nav aria-label="pagination">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${previous==0?'disabled':''}">
+                    <li class="page-item" th:classappend="${previous==-1?'disabled':''}">
                         <a class="page-link" th:href="@{|/?page=${previous}|}">Previous</a>
                     </li>
-                    <li class="page-item" th:each="page : ${pages}" th:classappend="${current==page?'active':''}">
-                        <a class="page-link" th:href="@{|/?page=${page}|}" th:text="${page}"></a>
+                    <li class="page-item" th:each="page, status : ${pages}" th:classappend="${current==status.index?'active':''}">
+                        <a class="page-link" th:href="@{/(page=${status.index})}" th:text="${status.index + 1}"></a>
                     </li>
                     <li class="page-item" th:classappend="${current==last?'disabled':''}">
                         <a class="page-link" th:href="@{|/?page=${next}|}">Next</a>

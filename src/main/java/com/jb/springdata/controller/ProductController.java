@@ -1,6 +1,7 @@
 package com.jb.springdata.controller;
 
 import com.jb.springdata.entity.Product;
+import com.jb.springdata.entity.User;
 import com.jb.springdata.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,40 +32,35 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-    private int castToInteger(String number) {
-        boolean isNull = number == null;
-        return isNull ? 0 : Integer.parseInt(number);
-    }
+
 
     @GetMapping
     public String findAll(
             @RequestParam Map<String, Object> params,
-            @ModelAttribute Product product,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
             Model model
     ) {
 
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString())-1) : 0;
         String searchTerm = (String) params.get("search");
 
-        PageRequest pageRequest = PageRequest.of(page, 9);
         Page<Product> productPage;
         if (searchTerm != null) {
-            productPage = productRepository.findProductByNameContains(searchTerm, pageRequest);
+            productPage = productRepository.findProductByNameContains(searchTerm, PageRequest.of(page, size));
         } else {
-            productPage = productRepository.findAll(pageRequest);
+            productPage = productRepository.findAll(PageRequest.of(page, size));
         }
 
-        int totalPage = productPage.getTotalPages();
-        if (totalPage > 0) {
-            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
-        }
 
+
+        model.addAttribute("pages", new int[productPage.getTotalPages()]);
         model.addAttribute("list", productPage.getContent());
-        model.addAttribute("current", page +1);
-        model.addAttribute("next", page + 2);
-        model.addAttribute("previous", page );
-        model.addAttribute("last", totalPage );
+        model.addAttribute("current", page );
+        model.addAttribute("next", page + 1);
+        model.addAttribute("previous", page -1);
+        model.addAttribute("last", (productPage.getTotalPages() -1) );
+
+        model.addAttribute("newProducts", new Product());
 
         return "index";
     }
@@ -85,8 +81,8 @@ public class ProductController {
         }
         if (!image.isEmpty()) {
             //Path directorioImagenes = Paths.get("src//main//resources//static/image");
-            //String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-            String rutaAbsoluta = "//home//jorge//Escritorio//proyectofinal//recursos";
+           // String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+            String rutaAbsoluta =  "//Users//jborras15//Documents/recurso";
 
             try {
                 byte[] bytesImg = image.getBytes();
