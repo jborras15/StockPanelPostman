@@ -1,7 +1,6 @@
 package com.jb.springdata.controller;
 
 import com.jb.springdata.entity.Product;
-import com.jb.springdata.entity.User;
 import com.jb.springdata.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @Slf4j
@@ -62,7 +58,7 @@ public class ProductController {
 
         model.addAttribute("newProducts", new Product());
 
-        return "index";
+        return "product";
     }
 
 
