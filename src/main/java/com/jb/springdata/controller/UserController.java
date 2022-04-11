@@ -1,7 +1,6 @@
 package com.jb.springdata.controller;
 
-import com.jb.springdata.entity.Product;
-import com.jb.springdata.entity.User;
+import com.jb.springdata.entity.Users;
 import com.jb.springdata.event.RegistrationCompleteEvent;
 import com.jb.springdata.repository.UserRepository;
 import com.jb.springdata.service.UserService;
@@ -15,10 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/users")
@@ -47,7 +43,7 @@ public class UserController {
     ) {
         String searchTerm = (String) params.get("search");
 
-        Page<User> users;
+        Page<Users> users;
 
         if (searchTerm != null) {
             users = userRepository.findUserByFirstNameContains(searchTerm,PageRequest.of(pageNumber, size));
@@ -63,14 +59,15 @@ public class UserController {
         model.addAttribute("last", (users.getTotalPages() -1) );
 
 
-        model.addAttribute("newUser", new User());
+        model.addAttribute("newUser", new Users());
         return "users";
     }
 
 
     @PostMapping
-    public String createUser(@ModelAttribute User user, final HttpServletRequest request) {
+    public String createUser(@ModelAttribute Users user, final HttpServletRequest request) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
         userService.save(user);
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "redirect:users";
