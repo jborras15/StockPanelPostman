@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8" http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +17,7 @@
 
         <div class="d-flex justify-content-between">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a th:href="@{/create}" class="btn btn-outline-primary">Create product</a></div>
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/create}" class="btn btn-outline-primary">Create product</a></div>
 
             <form class="form-inline my-2 my-lg-0" th:action="@{/}">
                 <div class="d-flex justify-content-between">
@@ -40,8 +41,8 @@
             <th>Code</th>
             <th>Quantity</th>
             <th>Reference</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th sec:authorize="hasRole('ADMIN')">Edit</th>
+            <th sec:authorize="hasRole('ADMIN')">Delete</th>
         </tr>
         <tr th:each="product : ${list}">
             <td th:text="${product.idProduct}"></td>
@@ -130,9 +131,9 @@
                 </div>
             </td>
             <td th:text="${product.reference}">Display Reference</td>
-            <td><a th:href="@{/edit/{idProduct} (idProduct=${product.idProduct})}" th:text="Edit"
+            <td sec:authorize="hasRole('ADMIN')"><a  th:href="@{/edit/{idProduct} (idProduct=${product.idProduct})}" th:text="Edit"
                    class="btn btn-outline-primary"/></td>
-            <td><a th:href="@{/delete(idProduct=${product.idProduct})}" th:text="Delete"
+            <td sec:authorize="hasRole('ADMIN')"><a  th:href="@{/delete(idProduct=${product.idProduct})}" th:text="Delete"
                    class="btn btn-outline-danger"/>
             </td>
         </tr>

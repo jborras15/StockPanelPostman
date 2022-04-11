@@ -1,6 +1,7 @@
 package com.jb.springdata.controller;
 
-import com.jb.springdata.entity.Users;
+
+import com.jb.springdata.entity.User;
 import com.jb.springdata.event.RegistrationCompleteEvent;
 import com.jb.springdata.repository.UserRepository;
 import com.jb.springdata.service.UserService;
@@ -43,7 +44,7 @@ public class UserController {
     ) {
         String searchTerm = (String) params.get("search");
 
-        Page<Users> users;
+        Page<User> users;
 
         if (searchTerm != null) {
             users = userRepository.findUserByFirstNameContains(searchTerm,PageRequest.of(pageNumber, size));
@@ -59,13 +60,13 @@ public class UserController {
         model.addAttribute("last", (users.getTotalPages() -1) );
 
 
-        model.addAttribute("newUser", new Users());
+        model.addAttribute("newUser", new User());
         return "users";
     }
 
 
     @PostMapping
-    public String createUser(@ModelAttribute Users user, final HttpServletRequest request) {
+    public String createUser(@ModelAttribute User user, final HttpServletRequest request) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
         userService.save(user);
