@@ -1,8 +1,10 @@
 package com.jb.springdata.controller;
 
 
+import com.jb.springdata.entity.Authority;
 import com.jb.springdata.entity.User;
 import com.jb.springdata.event.RegistrationCompleteEvent;
+import com.jb.springdata.repository.AuthorityRepository;
 import com.jb.springdata.repository.UserRepository;
 import com.jb.springdata.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class UserController {
 
     @Autowired
     private ApplicationEventPublisher publisher;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
 
 
@@ -69,7 +74,15 @@ public class UserController {
     public String createUser(@ModelAttribute User user, final HttpServletRequest request) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
+        user.setUsername(user.getEmail());
         userService.save(user);
+
+        Authority defaultRole = new Authority();
+        defaultRole.setUsername(user.getEmail());
+        defaultRole.setAuthority("ROLE_USER");
+
+        authorityRepository.save(defaultRole);
+
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "redirect:users";
     }

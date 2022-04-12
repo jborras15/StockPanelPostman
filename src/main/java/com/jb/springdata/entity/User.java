@@ -18,23 +18,15 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private String firstName;
-
-
     private String lastName;
-
-
     private String email;
-
+    private  String username;
+    private String role;
+    private boolean enabled = false;
 
     @Column(length = 60)
     private String password;
-
-    private String role;
-
-    private boolean enabled = false;
 
     @CreationTimestamp
     private Date createdAt;
