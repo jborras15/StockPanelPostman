@@ -2,6 +2,7 @@ package com.jb.springdata.controller;
 
 
 import com.jb.springdata.entity.Authority;
+import com.jb.springdata.entity.Password;
 import com.jb.springdata.entity.User;
 import com.jb.springdata.event.RegistrationCompleteEvent;
 import com.jb.springdata.repository.AuthorityRepository;
@@ -86,6 +87,7 @@ public class UserController {
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "redirect:users";
     }
+
 
     private String applicationUrl(HttpServletRequest request) {
         return "http://" +

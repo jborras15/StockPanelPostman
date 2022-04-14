@@ -22,7 +22,8 @@
                 <br/>
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input id="name" type="text" name="name" th:field="*{name}" class="form-control" required="true">
+                    <input id="name" type="text" name="name" th:field="*{name}"
+                           class="form-control" required="true">
                     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error Name</span>
                 </div>
                 <br/>

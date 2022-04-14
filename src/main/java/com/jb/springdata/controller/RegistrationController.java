@@ -1,10 +1,12 @@
 package com.jb.springdata.controller;
 
 import com.jb.springdata.entity.Password;
+
 import com.jb.springdata.entity.User;
 import com.jb.springdata.entity.VerificationToken;
 import com.jb.springdata.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("/verifyRegistration")
     public String verifyRegistration(@RequestParam("token") String token) {
         String result = userService.validateVerificationToken(token);
@@ -26,6 +29,7 @@ public class RegistrationController {
             return "User Verified Successfully";
         }
         return "Bad User";
+
     }
 
     @GetMapping("/resendVerifyToken")
@@ -39,11 +43,6 @@ public class RegistrationController {
         return "Verification Link Sent";
     }
 
-    private void resendVerificationTokenMail(User user, String applicationUrl, VerificationToken verificationToken) {
-        String url = applicationUrl + "/verifyRegistration?token=" + verificationToken.getToken();
-        // sendVerificationEmail()
-        log.info("Click the link to verify your account: {}", url);
-    }
 
     @PostMapping("/resetPassword")
     public String resetPassword(@RequestBody Password passwordModel, HttpServletRequest request) {
@@ -94,6 +93,17 @@ public class RegistrationController {
         log.info("Click the link to Reset your Password: {}",
                 url);
         return url;
+    }
+
+    private void resendVerificationTokenMail(User user, String applicationUrl, VerificationToken verificationToken) {
+        String url =
+                applicationUrl
+                        + "/verifyRegistration?token="
+                        + verificationToken.getToken();
+
+        //sendVerificationEmail()
+        log.info("Click the link to verify your account: {}",
+                url);
     }
 
 

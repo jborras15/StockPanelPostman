@@ -26,6 +26,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
             </ul>
             <span class="nav-link"  sec:authentication="name"> Usuario que hizo login</span>
+            <a class="nav-link" th:href="@{/change}">change Password</a>
             <form method="post" th:action="@{/logout}" class="d-flex">
                 <button class="btn btn-outline-primary"  href="#" onclick="this.parentNode.submit();">LOGOUT</button>
 
