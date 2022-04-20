@@ -12,6 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registro){
         registro.addViewController("/").setViewName("product");
+        registro.addViewController("/resetPassword");
         registro.addViewController("/login");
     }
 

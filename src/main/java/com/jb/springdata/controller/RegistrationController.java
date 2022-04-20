@@ -4,10 +4,12 @@ import com.jb.springdata.entity.Password;
 
 import com.jb.springdata.entity.User;
 import com.jb.springdata.entity.VerificationToken;
+import com.jb.springdata.event.RegistrationCompleteEvent;
 import com.jb.springdata.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,8 @@ import java.util.UUID;
 @RestController
 @Slf4j
 public class RegistrationController {
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     @Autowired
     private UserService userService;
@@ -53,6 +57,7 @@ public class RegistrationController {
             userService.createPasswordResetTokenForUser(user,token);
             url = passwordResetTokenMail(user,applicationUrl(request), token);
         }
+        publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return url;
     }
 

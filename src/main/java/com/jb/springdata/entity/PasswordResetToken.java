@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -45,5 +46,11 @@ public class PasswordResetToken {
         calendar.setTimeInMillis(new Date().getTime());
         calendar.add(Calendar.MINUTE, expirationTime);
         return new Date(calendar.getTime().getTime());
+    }
+
+    public PasswordResetToken(User user) {
+        this.user = user;
+        expirationTime = new Date();
+       token = UUID.randomUUID().toString();
     }
 }

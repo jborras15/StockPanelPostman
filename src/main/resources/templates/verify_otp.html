@@ -31,34 +31,31 @@
                      style="max-width: 120% ">
             </div>
             <div class="my-2 col-lg-7 px-5">
-                <h1 class="font-weight-bolt display-6 " style="color:rgb(25,123,191)">welcome</h1>
-                <h6>Enter your credentials</h6>
 
-                <div class="text-primary bg-light" th:if="${param.error}">
-                    user o password incorrectos.
+                <div class="alert alert-success" role="alert">
+                    We have sent OTP to Your email ..
                 </div>
-                <div class="text-primary bg-light" th:if="${param.logout}">
-                    Termino la sesion correctamente.
+                <div th:if="${session.message}" class="container" >
+
+                    <div class="alert alert-danger my-2 text-center" role="alert">
+
+                        <span th:text="${session.message}"></span>
+                    </div>
+
+                    <th:block th:text="${#session.removeAttribute('message')}"></th:block>
                 </div>
-                <div class="text-primary bg-light" th:if="${param.change}">
-                    <p th:text="${param.change}"></p>
-                </div>
+
                 <br>
-                <form th:action="@{/login}" method="post">
+                <form action="" th:action="@{/verify-otp}" method="post">
                     <div class="form-row">
                         <div class="col-lg-7">
-                            <input class="form-control" type="text" name="username" placeholder="Email"/>
-                        </div>
-                        <br>
-                        <div class="col-lg-7">
-                            <input  class="form-control" type="password" name="password" placeholder="password"/>
+                            <input  required="required" class="form-control" type="text" name="otp" placeholder="Enter OTP here"/>
                         </div>
                         <br>
                         <div class="form-row">
-                            <div class="col-lg-7">
-                                <button class="btn btn-outline-info" type="submit" value="Sign In" >Login</button>
+                            <div class="col-lg-7 text-center">
+                                <button class="btn btn-outline-info" type="submit" value="Sign In" >Verify</button>
                             </div>
-                            <a th:href="@{/forgot}" style="color:rgb(25,123,191)"> Forgot password ?</a>
                         </div>
                     </div>
                 </form>
