@@ -2,23 +2,20 @@ package com.jb.springdata.controller;
 
 
 import com.jb.springdata.entity.Authority;
-import com.jb.springdata.entity.PasswordResetToken;
+import com.jb.springdata.entity.Password;
 import com.jb.springdata.entity.User;
 import com.jb.springdata.event.RegistrationCompleteEvent;
 import com.jb.springdata.repository.AuthorityRepository;
-import com.jb.springdata.repository.PasswordResetTokenRepository;
 import com.jb.springdata.repository.UserRepository;
 import com.jb.springdata.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -42,8 +39,7 @@ public class UserController {
     @Autowired
     private AuthorityRepository authorityRepository;
 
-    @Autowired
-    private PasswordResetTokenRepository passwordResetTokenRepository;
+
 
 
 
@@ -102,6 +98,9 @@ public class UserController {
                 request.getServerPort() +
                 request.getContextPath();
     }
+
+
+
 
 
 

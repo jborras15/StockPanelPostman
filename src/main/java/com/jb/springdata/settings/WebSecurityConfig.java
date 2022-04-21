@@ -1,6 +1,5 @@
 package com.jb.springdata.settings;
 
-import com.jb.springdata.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

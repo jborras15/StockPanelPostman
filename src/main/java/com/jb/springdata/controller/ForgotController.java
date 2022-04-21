@@ -4,10 +4,8 @@ import com.jb.springdata.entity.User;
 import com.jb.springdata.repository.UserRepository;
 import com.jb.springdata.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,14 +27,6 @@ public class ForgotController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-
-   /* @GetMapping(value = "/change")
-    public String changePassword(Model model) {
-        model.addAttribute("user", new User());
-        return "password_change_form";
-    }*/
-
 
 
     //email id from open handler
@@ -122,13 +112,5 @@ public class ForgotController {
 
     }
 
-   /* @PostMapping("/change")
-    public  String change(@RequestParam("newpassword") String newpassword, HttpSession session, @RequestParam("email") String email){
-        User user = userRepository.getUserByUserName(email);
-        user.setPassword(passwordEncoder.encode(newpassword));
-        userRepository.save(user);
-        return "redirect:/user";
-        //return "redirect:/login?change=password changed successfully";
 
-    }*/
 }
