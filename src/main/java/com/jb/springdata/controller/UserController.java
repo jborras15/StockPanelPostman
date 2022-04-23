@@ -2,7 +2,6 @@ package com.jb.springdata.controller;
 
 
 import com.jb.springdata.entity.Authority;
-import com.jb.springdata.entity.Password;
 import com.jb.springdata.entity.User;
 import com.jb.springdata.event.RegistrationCompleteEvent;
 import com.jb.springdata.repository.AuthorityRepository;
@@ -15,9 +14,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Map;
 
 @Controller
@@ -47,7 +48,7 @@ public class UserController {
     public String index(
             @RequestParam Map<String, Object> params,
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNumber,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             Model model
     ) {
         String searchTerm = (String) params.get("search");
@@ -74,7 +75,19 @@ public class UserController {
 
 
     @PostMapping
-    public String createUser(@ModelAttribute User user, final HttpServletRequest request) {
+    public String createUser(@ModelAttribute User user, final HttpServletRequest request,
+                             @Valid User user1, BindingResult result) {
+
+        User existing = userService.findUserByEmail(user.getEmail());
+        if (existing != null) {
+            result.rejectValue("email", null,
+                    "There is already an account registered with that email");
+
+        }
+
+        if (result.hasErrors()) {
+            return "users";
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
         user.setUsername(user.getEmail());
@@ -89,6 +102,8 @@ public class UserController {
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "redirect:users";
     }
+
+
 
 
     private String applicationUrl(HttpServletRequest request) {

@@ -52,15 +52,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public User findProduct(User user) {
-        return userRepository.findById(user.getId()).orElse(null);
+    public List<User> findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
     }
 
     @Override
@@ -108,53 +101,6 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
-
-    @Override
-    public void createPasswordResetTokenForUser(User user, String token) {
-        PasswordResetToken passwordResetToken
-                = new PasswordResetToken(user,token);
-        passwordResetTokenRepository.save(passwordResetToken);
-    }
-
-    @Override
-    public String validatePasswordResetToken(String token) {
-        PasswordResetToken passwordResetToken
-                = passwordResetTokenRepository.findByToken(token);
-
-        if (passwordResetToken == null) {
-            return "invalid";
-        }
-
-        User user = passwordResetToken.getUser();
-        Calendar cal = Calendar.getInstance();
-
-        if ((passwordResetToken.getExpirationTime().getTime()
-                - cal.getTime().getTime()) <= 0) {
-            passwordResetTokenRepository.delete(passwordResetToken);
-            return "expired";
-        }
-
-        return "valid";
-    }
-
-    @Override
-    public Optional<User> getUserByPasswordResetToken(String token) {
-        return Optional.ofNullable(passwordResetTokenRepository.findByToken(token).getUser());
-    }
-
-    @Override
-    public void changePassword(User user, String newPassword) {
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
-    }
-
-    @Override
-    public boolean checkIfValidOldPassword(User user, String oldPassword) {
-        return passwordEncoder.matches(oldPassword, user.getPassword());
-    }
-
-
 
 
 

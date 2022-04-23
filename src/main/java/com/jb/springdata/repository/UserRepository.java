@@ -9,14 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findUserByFirstNameContains(String name, Pageable pageable);
 
     User findByEmail(String email);
+    List<User> findUserByUsername(String username);
 
     @Query("select u from User u where u.email = :email")
     public User getUserByUserName(@Param("email") String email);
-
-
 }

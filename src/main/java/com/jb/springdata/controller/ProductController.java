@@ -34,7 +34,7 @@ public class ProductController {
     public String findAll(
             @RequestParam Map<String, Object> params,
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             Model model
     ) {
 
@@ -95,7 +95,7 @@ public class ProductController {
         return "redirect:/";
     }
 
-    @GetMapping("/detalle/{idProduct}")
+    @GetMapping("detalle/{idProduct}")
     public String detalleProduct(@PathVariable Long idProduct, Model model) {
         model.addAttribute("product", productRepository.findById(idProduct));
         return "detalleProduct";
