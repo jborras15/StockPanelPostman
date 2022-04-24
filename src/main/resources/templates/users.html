@@ -12,8 +12,14 @@
 <div th:insert="~{navbar :: navbar}"></div>
 <div th:insert="~{create-user :: modal(newUser)}"></div>
 <br>
+
+<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+     th:text="${mensaje}"
+     class="alert">
+</div>
 <div class="container-xxl">
 <div>
+
 
     <div class="d-flex justify-content-between">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">

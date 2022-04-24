@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -39,9 +40,6 @@ public class UserController {
 
     @Autowired
     private AuthorityRepository authorityRepository;
-
-
-
 
 
     @GetMapping
@@ -75,13 +73,17 @@ public class UserController {
 
 
     @PostMapping
-    public String createUser(@ModelAttribute User user, final HttpServletRequest request,
-                             @Valid User user1, BindingResult result) {
+    public String createUser(@Valid @ModelAttribute User user, final HttpServletRequest request, RedirectAttributes redirectAttributes,
+                             BindingResult result) {
 
         User existing = userService.findUserByEmail(user.getEmail());
         if (existing != null) {
-            result.rejectValue("email", null,
-                    "There is already an account registered with that email");
+            redirectAttributes
+                    .addFlashAttribute("mensaje", "El correo ya existe ")
+                    .addFlashAttribute("clase", "danger");
+            return "redirect:users";
+
+
 
         }
 
@@ -100,6 +102,9 @@ public class UserController {
         authorityRepository.save(defaultRole);
 
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
+        redirectAttributes
+                .addFlashAttribute("mensaje", "User agregado exitosamente ")
+                .addFlashAttribute("clase", "success");
         return "redirect:users";
     }
 
@@ -113,11 +118,5 @@ public class UserController {
                 request.getServerPort() +
                 request.getContextPath();
     }
-
-
-
-
-
-
 }
 

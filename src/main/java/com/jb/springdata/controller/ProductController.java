@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -69,7 +70,9 @@ public class ProductController {
     }
 
     @PostMapping("/save")
-    public String save(@Valid @ModelAttribute Product product, Errors error, @RequestParam("file") MultipartFile image) {
+    public String save(@Valid @ModelAttribute Product product, Errors error,
+                       @RequestParam("file") MultipartFile image,
+                       RedirectAttributes redirectAttributes) {
 
 
         if (error.hasErrors()) {
@@ -91,6 +94,9 @@ public class ProductController {
                 e.printStackTrace();
             }
         }
+        redirectAttributes
+                .addFlashAttribute("mensaje", "El producto se guardo exitosamente ")
+                .addFlashAttribute("clase", "success");
         productRepository.save(product);
         return "redirect:/";
     }
